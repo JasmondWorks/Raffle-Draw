@@ -1,11 +1,11 @@
 const Event = require("../models/eventModel");
 
 const getEvents = async (req, res) => {
-  //   const events = await Event.find({});
+    const events = await Event.find({});
 
-  console.log("all events");
+  // console.log("all events");
 
-  res.status(200).json({ mssg: "all events" });
+  res.status(200).json(events);
 };
 const getEvent = async (req, res) => {
   res.json({ message: "get an event" });
