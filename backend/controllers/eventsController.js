@@ -1,7 +1,7 @@
 const Event = require("../models/eventModel");
 
 const getEvents = async (req, res) => {
-    const events = await Event.find({});
+  const events = await Event.find({});
 
   // console.log("all events");
 
