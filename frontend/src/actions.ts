@@ -27,7 +27,7 @@ export const signIn = async (userDetails: {
 
     const data = await res.json();
 
-    if (!res.ok) throw new Error("Check your internet connection");
+    if (!res.ok) throw new Error(data.error);
 
     const { user, token } = data;
 
@@ -266,11 +266,7 @@ export const getResults = async (eventId: string, page = "1") => {
 
     return { status: "success", data };
   } catch (error) {
-    if (error instanceof Error) {
-      return { status: "error", data: error.message };
-    } else {
-      return { status: "error", data: "An unknown error occurred" };
-    }
+    return { status: "error", data: error };
   }
 };
 
@@ -289,11 +285,7 @@ export const getAllResults = async (eventId: string) => {
 
     return { status: "success", data };
   } catch (error) {
-    if (error instanceof Error) {
-      return { status: "error", data: error.message };
-    } else {
-      return { status: "error", data: "An unknown error occurred" };
-    }
+    return { status: "error", data: error };
   }
 };
 
@@ -320,11 +312,7 @@ export const addResult = async (eventId: string, ticketNumber: number) => {
       throw new Error(data.error);
     }
   } catch (error) {
-    if (error instanceof Error) {
-      return { status: "error", data: error.message };
-    } else {
-      return { status: "error", data: "An unknown error occurred" };
-    }
+    return { status: "error", data: error };
   }
 };
 
@@ -342,10 +330,6 @@ export const clearResults = async (eventId: string) => {
 
     return { status: "success", data: "Results cleared successfully" };
   } catch (error) {
-    if (error instanceof Error) {
-      return { status: "error", data: error.message };
-    } else {
-      return { status: "error", data: "An unknown error occurred" };
-    }
+    return { status: "error", data: error };
   }
 };
