@@ -58,6 +58,7 @@ export default function ImageInput({
             className="w-full h-full object-cover rounded-lg shadow-md"
           />
           <button
+            type="button"
             onClick={handleClear}
             className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
           >

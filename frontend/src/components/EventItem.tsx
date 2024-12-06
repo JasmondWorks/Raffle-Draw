@@ -40,7 +40,7 @@ export default function EventItem({ event }: { event: Event }) {
       ) : (
         <span>N/A</span>
       )}
-      <div className="flex gap-1">
+      <div className="flex gap-3">
         <Link href={`/user/events/${event._id}/spin`}>
           <button className="hover:bg-neutral-200 text-neutral-500 !hover:text-white p-2 h-full aspect-square grid place-items-center">
             <FaExternalLinkAlt className="" />
@@ -49,7 +49,7 @@ export default function EventItem({ event }: { event: Event }) {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <button className="hover:bg-neutral-200 text-indigo-500 !hover:text-white p-2 h-full aspect-square grid place-items-center">
-              <Edit size={16} className="" />
+              <Edit size={18} className="" />
             </button>
           </DialogTrigger>
           <EditEventDialogContent setIsOpen={setOpen} event={event} />
@@ -58,7 +58,7 @@ export default function EventItem({ event }: { event: Event }) {
         <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <DialogTrigger asChild>
             <button className="hover:bg-neutral-200 text-red-500 !hover:text-white p-2 h-full aspect-square grid place-items-center">
-              <FaTrash size={16} />
+              <FaTrash size={18} />
             </button>
           </DialogTrigger>
           <DeleteEventDialogContent

@@ -43,26 +43,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Fetch stored token on mount
   useEffect(() => {
     async function authenticationInit() {
-      try {
-        await authenticate();
+      const res = await authenticate();
+      if (res.status === "success") {
         setAuthenticated(true);
         console.log("authenticated");
-      } catch (error: unknown) {
-        // Use unknown here
-        if (error instanceof Error) {
-          // Narrowing the error type
-          toast.error("Login to access your events");
-          setAuthenticated(false);
-          console.log("not authenticated: ", error.message);
-        } else {
-          // Handle case where error is not an instance of Error
-          console.log("Unknown error: ", error);
-        }
+      } else {
+        toast.error(res.data as string);
+        setAuthenticated(false);
         setUser(null);
         logout();
-      } finally {
-        setIsAuthenticating(false);
       }
+      setIsAuthenticating(false);
     }
 
     const storedUser = localStorage.getItem("user");

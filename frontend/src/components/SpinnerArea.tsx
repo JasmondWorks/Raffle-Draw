@@ -98,8 +98,12 @@ export default function SpinnerArea({
       setCurrentNumber(selectedNumber);
 
       // Save result to the database
-      await addResult(event._id, selectedNumber);
-
+      const res = await addResult(event._id, selectedNumber);
+      if (res.status === "success") {
+        // toast.success("Your result has successfully been saved.");
+      } else {
+        toast.error(res.data as string);
+      }
       setIsSpinning(false);
 
       // Stop drum roll and play crash sound

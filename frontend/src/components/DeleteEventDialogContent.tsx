@@ -14,23 +14,16 @@ import toast from "react-hot-toast";
 export default function DeleteEventDialogContent({ setIsOpen, event }) {
   const [isLoading, setIsLoading] = useState(false);
   async function handleDeleteEvent() {
-    try {
-      setIsLoading(true);
-      await deleteEvent(event._id);
+    setIsLoading(true);
 
-      toast.success("Event has been deleted successfully");
+    const res = await deleteEvent(event._id);
+    if (res.status === "success") {
+      toast.success("Your event has successfully been deleted.");
       setIsOpen(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message || "An error occurred while deleting the event."
-        );
-      } else {
-        toast.error("An unknown error occurred while deleting the event.");
-      }
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(res.data as string);
     }
+    setIsLoading(false);
   }
   return (
     <DialogContent>

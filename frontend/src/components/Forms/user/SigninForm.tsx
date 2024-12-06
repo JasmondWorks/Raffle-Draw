@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { User } from "@/lib/types";
 
 export default function SigninForm() {
   const [email, setEmail] = useState("");
@@ -18,21 +19,24 @@ export default function SigninForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      setIsLoading(true);
-      const userDetails = { email, password };
-      const { user, token } = await signIn(userDetails);
+    const userDetails = { email, password };
+
+    setIsLoading(true);
+    const res = await signIn(userDetails);
+
+    console.log(res);
+
+    if (res.status === "success") {
+      const data = res.data as { user: User; token: string };
+      toast.success("You have successfully signed in.");
+      const { user, token } = data;
+
       login(user, token);
       router.push("/user");
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message || "An error occurred while signing in.");
-      } else {
-        toast.error("An unknown error occurred while signing in.");
-      }
-    } finally {
-      setIsLoading(false);
+    } else if (res.status === "error") {
+      toast.error(res.data as string);
     }
+    setIsLoading(false);
   };
 
   return (

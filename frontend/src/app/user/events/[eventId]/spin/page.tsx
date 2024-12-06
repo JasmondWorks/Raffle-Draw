@@ -1,25 +1,32 @@
-/* eslint-disable */
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-
 import { getAllResults, getEvent, getResults } from "@/actions";
 import ResultsDialog from "@/components/ResultsDialog";
 import SpinnerArea from "@/components/SpinnerArea";
+import { Event, Result, Results } from "@/lib/types";
 
-const SpinPage = async ({
+const SpinPage = async function ({
   params,
   searchParams,
 }: {
-  params: any;
-  searchParams: any;
-}) => {
+  params: { eventId: string };
+  searchParams: { page: string };
+}) {
   const { eventId } = params; // Extracting eventId from params
   const { page } = searchParams; // Extracting page from searchParams
 
   console.log(params, searchParams);
 
-  const event = await getEvent(eventId);
-  const results = await getResults(eventId, page);
-  const allResults = await getAllResults(eventId);
+  const eventRes = await getEvent(eventId);
+  const event = eventRes.status === "success" ? (eventRes.data as Event) : null;
+
+  const resultsRes = await getResults(eventId, page);
+  const results =
+    resultsRes.status === "success" ? (resultsRes.data as Results) : null;
+
+  const allResultsRes = await getAllResults(eventId);
+  const allResults =
+    allResultsRes.status === "success"
+      ? (allResultsRes.data as Result[])
+      : null;
 
   return (
     <div className="pt-10 min-h-screen flex flex-col">

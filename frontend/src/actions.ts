@@ -1,6 +1,5 @@
 "use server";
 
-// import { getUserToken } from "@/server-utils";
 import { revalidatePath } from "next/cache";
 
 import { cookies } from "next/headers";
@@ -17,59 +16,84 @@ export const signIn = async (userDetails: {
   email: string;
   password: string;
 }) => {
-  const res = await fetch(`${apiUrl}/users/signin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userDetails),
-  });
+  try {
+    const res = await fetch(`${apiUrl}/users/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userDetails),
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error("Check your internet connection");
 
-  const { user, token } = data;
+    const { user, token } = data;
 
-  return { user, token };
+    return { status: "success", data: { user, token } };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
+
 export const signUp = async (userDetails: {
   email: string;
   password: string;
 }) => {
-  const res = await fetch(`${apiUrl}/users/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userDetails),
-  });
+  try {
+    const res = await fetch(`${apiUrl}/users/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userDetails),
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  const { user, token } = data;
+    const { user, token } = data;
 
-  return { user, token };
+    return { status: "success", data: { user, token } };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 export const authenticate = async () => {
-  const storedToken = await getUserToken();
+  try {
+    const storedToken = await getUserToken();
 
-  const res = await fetch(`${apiUrl}/users/authenticate`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-  });
-  const data = await res.json();
+    const res = await fetch(`${apiUrl}/users/authenticate`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  console.log(data);
+    console.log(data);
 
-  return data;
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const createEvent = async (eventDetails: {
@@ -78,23 +102,33 @@ export const createEvent = async (eventDetails: {
   organisationName: string;
   logoImage: string;
 }) => {
-  const storedToken = await getUserToken();
-  console.log(storedToken);
-  const res = await fetch(`${apiUrl}/events`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-    body: JSON.stringify(eventDetails),
-  });
+  try {
+    const storedToken = await getUserToken();
+    const res = await fetch(`${apiUrl}/events`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+      body: JSON.stringify(eventDetails),
+    });
 
-  const data = await res.json();
-  console.log(data);
-  revalidatePath("/user");
+    const data = await res.json();
+    console.log(data);
+    revalidatePath("/user");
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
+
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
+
 export const updateEvent = async (
   eventDetails: {
     title: string;
@@ -104,163 +138,214 @@ export const updateEvent = async (
   },
   eventId: string
 ) => {
-  const storedToken = await getUserToken();
-  console.log(storedToken);
-  const res = await fetch(`${apiUrl}/events/${eventId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-    body: JSON.stringify(eventDetails),
-  });
+  try {
+    const storedToken = await getUserToken();
 
-  const data = await res.json();
-  console.log(data);
-  revalidatePath("/user");
+    const res = await fetch(`${apiUrl}/events/${eventId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+      body: JSON.stringify(eventDetails),
+    });
 
-  if (!res.ok) throw new Error(data.error);
-};
-export const updateEventNumbersLeft = async (
-  eventId: string,
-  numbersLeft: number
-) => {
-  console.log(numbersLeft);
+    const data = await res.json();
+    console.log(data);
+    revalidatePath("/user");
 
-  const storedToken = await getUserToken();
+    if (!res.ok) throw new Error(data.error);
 
-  const res = await fetch(`${apiUrl}/events/${eventId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-    body: JSON.stringify({ eventId, numbersLeft }),
-  });
-
-  const data = await res.json();
-  console.log(data);
-  revalidatePath(`/user/events/${eventId}/spin`);
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const getEvents = async (pageNum = "1") => {
-  const storedToken = await getUserToken();
+  try {
+    const storedToken = await getUserToken();
 
-  const res = await fetch(`${apiUrl}/events?page=${pageNum}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-  });
+    const res = await fetch(`${apiUrl}/events?page=${pageNum}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch events");
+    if (!res.ok) {
+      throw new Error("Failed to fetch events");
+    }
+
+    const data = await res.json();
+
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
   }
-
-  const data = await res.json();
-
-  return data; // Adjust depending on the structure of your API response
 };
 
 export const deleteEvent = async (eventId: string) => {
-  const storedToken = await getUserToken();
+  try {
+    const storedToken = await getUserToken();
 
-  const res = await fetch(`${apiUrl}/events/${eventId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-  });
+    const res = await fetch(`${apiUrl}/events/${eventId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  revalidatePath("/user");
+    revalidatePath("/user");
 
-  return data;
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const getEvent = async (eventId: string) => {
-  const storedToken = await getUserToken();
+  try {
+    const storedToken = await getUserToken();
 
-  const res = await fetch(`${apiUrl}/events/${eventId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
-    },
-  });
+    const res = await fetch(`${apiUrl}/events/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  return data;
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const getResults = async (eventId: string, page = "1") => {
-  const res = await fetch(`${apiUrl}/results?eventId=${eventId}&page=${page}`, {
-    method: "GET", // GET request does not need a body
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const res = await fetch(
+      `${apiUrl}/results?eventId=${eventId}&page=${page}`,
+      {
+        method: "GET", // GET request does not need a body
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  return data;
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const getAllResults = async (eventId: string) => {
-  const res = await fetch(`${apiUrl}/results/all?eventId=${eventId}`, {
-    method: "GET", // GET request does not need a body
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const res = await fetch(`${apiUrl}/results/all?eventId=${eventId}`, {
+      method: "GET", // GET request does not need a body
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) throw new Error(data.error);
+    if (!res.ok) throw new Error(data.error);
 
-  return data;
+    return { status: "success", data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };
 
 export const addResult = async (eventId: string, ticketNumber: number) => {
-  console.log(eventId, ticketNumber);
+  try {
+    console.log(eventId, ticketNumber);
 
-  const res = await fetch(`${apiUrl}/results`, {
-    method: "POST", // Use POST instead of GET for creating a new result
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ eventId, ticketNumber }), // Send the data in the body
-  });
+    const res = await fetch(`${apiUrl}/results`, {
+      method: "POST", // Use POST instead of GET for creating a new result
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ eventId, ticketNumber }), // Send the data in the body
+    });
 
-  // Check if the response was successful
-  if (res.ok) {
-    revalidatePath(`/user/events/${eventId}/spin`);
-  } else {
-    const data = await res.json();
-    // Handle error if the request fails
-    console.error("Failed to add result", res.statusText);
-    throw new Error(data.error);
+    // Check if the response was successful
+    if (res.ok) {
+      revalidatePath(`/user/events/${eventId}/spin`);
+      return { status: "success", data: "Result added successfully" };
+    } else {
+      const data = await res.json();
+      // Handle error if the request fails
+      console.error("Failed to add result", res.statusText);
+      throw new Error(data.error);
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
   }
 };
 
 export const clearResults = async (eventId: string) => {
-  await fetch(`${apiUrl}/results/deleteAll`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ eventId }),
-  });
+  try {
+    await fetch(`${apiUrl}/results/deleteAll`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ eventId }),
+    });
 
-  revalidatePath(`/user/events/${eventId}/spin`);
+    revalidatePath(`/user/events/${eventId}/spin`);
+
+    return { status: "success", data: "Results cleared successfully" };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: "error", data: error.message };
+    } else {
+      return { status: "error", data: "An unknown error occurred" };
+    }
+  }
 };

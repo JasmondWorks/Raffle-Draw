@@ -1,16 +1,25 @@
-"use client";
-
+import { getEvents } from "@/actions";
 import CreateEventDialog from "@/components/CreateEventDialog";
 import Events from "@/components/Events";
 import SpinnerFull from "@/components/SpinnerFull";
-import { useSearchParams } from "next/navigation"; // Next.js 13+ hook for searchParams
 import React, { Suspense } from "react";
+import { EventsResponse } from "@/lib/types";
+import { toast } from "react-hot-toast";
 
-export default function UserHomePage() {
-  const searchParams = useSearchParams(); // Use the hook to get the searchParams
+export default async function UserHomePage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
+  const page = searchParams.page || "1";
 
-  // Extract the 'page' parameter from searchParams
-  const page = searchParams?.get("page") || "1"; // Default to "1" if no page is provided
+  const res = await getEvents(page);
+
+  const events = res.status === "success" ? (res.data as EventsResponse) : null;
+
+  if (res.status === "error") {
+    toast.error(res.data as string);
+  }
 
   return (
     <>
@@ -22,7 +31,7 @@ export default function UserHomePage() {
               <CreateEventDialog />
             </div>
             <Suspense fallback={<SpinnerFull />} key={page}>
-              <Events page={page} />
+              {events && <Events page={page} events={events} />}
             </Suspense>
           </div>
         </section>

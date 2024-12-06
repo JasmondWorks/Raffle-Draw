@@ -52,7 +52,7 @@ export default function Navbar() {
                 onClick={handleToggleSideNav}
                 className="text-neutral-600 md:hidden"
               >
-                <FiMenu />
+                <FiMenu className="text-2xl" />
               </button>
               <div className="hidden md:block">
                 <LogoutButton showText />
@@ -85,7 +85,7 @@ function SidebarNav({ isShowing, onHideSideNav }) {
             onClick={onHideSideNav}
             className="absolute top-2 right-2 w-full flex justify-end"
           >
-            <IoIosClose className="text-3xl" />
+            <IoIosClose className="text-4xl" />
           </button>
           <div className="text-sm font-bold text-neutral-600">
             YOUR <span className="text-indigo-600">SPINNER</span>
@@ -116,10 +116,10 @@ function LogoutButton({ showText = false }) {
   return (
     <button
       onClick={logout}
-      className="leading-none font-sans font-semibold text-sm flex gap-3 items-center"
+      className="leading-none font-sans font-semibold text-base flex gap-3 items-center"
     >
       {showText && "Logout"}
-      {<FiLogOut className="text-red-600" />}
+      {<FiLogOut className="text-red-600 text-xl" />}
     </button>
   );
 }

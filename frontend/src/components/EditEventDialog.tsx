@@ -125,10 +125,13 @@ export function EditEventDialogContent({
         logoImage: uploadedImageUrl,
       };
 
-      await updateEvent(eventDetails, event._id);
-
-      toast.success("Your event has successfully been updated.");
-      setIsOpen(false);
+      const res = await updateEvent(eventDetails, event._id);
+      if (res.status === "success") {
+        toast.success("Your event has successfully been updated.");
+        setIsOpen(false);
+      } else {
+        toast.error(res.data as string);
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(
@@ -219,7 +222,7 @@ export function EditEventDialogContent({
               <div>
                 <div className="mt-2">
                   <ImageInput
-                    label="Upload a logo"
+                    label="Upload a logo (*optional)"
                     setImage={setImage}
                     savedPreview={preview}
                   />

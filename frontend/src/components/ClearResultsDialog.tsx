@@ -16,10 +16,13 @@ export default function ClearResultsDialog({ setIsOpen, event }) {
   async function handleDeleteResults() {
     try {
       setIsLoading(true);
-      await clearResults(event._id);
-
-      toast.success("Results have been cleared successfully");
-      setIsOpen(false);
+      const res = await clearResults(event._id);
+      if (res.status === "success") {
+        toast.success("Results have been cleared successfully");
+        setIsOpen(false);
+      } else {
+        toast.error(res.data as string);
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

@@ -113,10 +113,13 @@ function CreateEventDialogContent({
         logoImage: uploadedImageUrl,
       };
 
-      await createEvent(eventDetails);
-
-      toast.success("Your event has successfully been created.");
-      setIsOpen(false);
+      const res = await createEvent(eventDetails);
+      if (res.status === "success") {
+        toast.success("Your event has successfully been created.");
+        setIsOpen(false);
+      } else {
+        toast.error(res.data as string);
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(
@@ -206,7 +209,10 @@ function CreateEventDialogContent({
               </div>
               <div>
                 <div className="mt-2">
-                  <ImageInput label="Upload a logo" setImage={setImage} />
+                  <ImageInput
+                    label="Upload a logo (*optional)"
+                    setImage={setImage}
+                  />
                 </div>
               </div>
               <div>

@@ -3,6 +3,7 @@
 import { signUp } from "@/actions";
 import Spinner from "@/components/Spinner";
 import { useAuth } from "@/contexts/AuthContext";
+import { User } from "@/lib/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -22,23 +23,19 @@ export default function SignupForm() {
 
     if (password !== confirmPassword)
       return toast.error("Passwords do not match");
-    try {
-      setIsLoading(true);
-      const userDetails = { email, password };
-      const { user, token } = await signUp(userDetails);
-      login(user, token);
 
+    setIsLoading(true);
+    const userDetails = { email, password };
+    const res = await signUp(userDetails);
+    if (res.status === "success") {
+      const { user, token } = res.data as { user: User; token: string };
+      login(user, token);
       toast.success("Signed up successfully");
       router.push("/user");
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message || "An error occurred while signing up.");
-      } else {
-        toast.error("An unknown error occurred while signing up.");
-      }
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(res.data as string);
     }
+    setIsLoading(false);
   };
 
   return (

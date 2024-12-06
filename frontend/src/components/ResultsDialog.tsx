@@ -77,10 +77,13 @@ function ClearResultsDialogContent({
   async function handleDeleteResults() {
     try {
       setIsLoading(true);
-      await clearResults(eventId);
-
-      toast.success("Results have been cleared successfully");
-      setIsOpen(false);
+      const res = await clearResults(eventId);
+      if (res.status === "success") {
+        toast.success("Results have been cleared successfully");
+        setIsOpen(false);
+      } else {
+        toast.error(res.data as string);
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
