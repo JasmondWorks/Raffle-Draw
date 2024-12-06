@@ -12,7 +12,7 @@ const usersRoute = require("./routes/users");
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (_, res) => {
+app.get("/api/v1", (_, res) => {
   res.status(200).json("Home route");
 });
 // Routes
