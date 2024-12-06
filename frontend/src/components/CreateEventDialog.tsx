@@ -39,7 +39,9 @@ function CreateEventDialogContent({
   setIsOpen: (open: boolean) => void;
 }) {
   const [title, setTitle] = useState("");
-  const [numOfParticipants, setNumOfParticipants] = useState("");
+  const [numOfParticipants, setNumOfParticipants] = useState<number | null>(
+    null
+  );
   const [organisationName, setOrganisationName] = useState("");
 
   const [image, setImage] = useState<File | null>();
@@ -106,7 +108,7 @@ function CreateEventDialogContent({
       // Now, create the event with the image URL
       const eventDetails = {
         title,
-        numOfParticipants,
+        numOfParticipants: Number(numOfParticipants),
         organisationName,
         logoImage: uploadedImageUrl,
       };
@@ -116,9 +118,13 @@ function CreateEventDialogContent({
       toast.success("Your event has successfully been created.");
       setIsOpen(false);
     } catch (error) {
-      toast.error(
-        error.message || "An error occurred while creating the event."
-      );
+      if (error instanceof Error) {
+        toast.error(
+          error.message || "An error occurred while creating the event."
+        );
+      } else {
+        toast.error("An error occurred while creating the event.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -200,11 +206,7 @@ function CreateEventDialogContent({
               </div>
               <div>
                 <div className="mt-2">
-                  <ImageInput
-                    image={image}
-                    label="Upload a logo"
-                    setImage={setImage}
-                  />
+                  <ImageInput label="Upload a logo" setImage={setImage} />
                 </div>
               </div>
               <div>

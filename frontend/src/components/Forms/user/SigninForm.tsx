@@ -25,7 +25,11 @@ export default function SigninForm() {
       login(user, token);
       router.push("/user");
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(error.message || "An error occurred while signing in.");
+      } else {
+        toast.error("An unknown error occurred while signing in.");
+      }
     } finally {
       setIsLoading(false);
     }

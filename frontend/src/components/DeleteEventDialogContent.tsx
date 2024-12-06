@@ -21,7 +21,13 @@ export default function DeleteEventDialogContent({ setIsOpen, event }) {
       toast.success("Event has been deleted successfully");
       setIsOpen(false);
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(
+          error.message || "An error occurred while deleting the event."
+        );
+      } else {
+        toast.error("An unknown error occurred while deleting the event.");
+      }
     } finally {
       setIsLoading(false);
     }

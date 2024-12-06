@@ -12,7 +12,7 @@ import { FaExternalLinkAlt, FaTrash } from "react-icons/fa";
 
 export default function EventItem({ event }: { event: Event }) {
   const [open, setOpen] = React.useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>();
 
   return (
     <div

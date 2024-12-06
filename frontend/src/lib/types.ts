@@ -10,6 +10,14 @@ export interface Event {
   __v: number; // Version key used by Mongoose for document versioning
 }
 
+export type EventsResponse = {
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalEvents: number;
+  data: Event[]; // Array of events
+};
+
 export type Result = {
   _id: string;
   eventId: string;

@@ -31,7 +31,11 @@ export default function SignupForm() {
       toast.success("Signed up successfully");
       router.push("/user");
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(error.message || "An error occurred while signing up.");
+      } else {
+        toast.error("An unknown error occurred while signing up.");
+      }
     } finally {
       setIsLoading(false);
     }

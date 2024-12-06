@@ -34,7 +34,7 @@ export default function SpinnerArea({
     const updatedArray = numbers.filter((item) => !removeSet.has(item));
 
     setNumbers(updatedArray);
-  }, [allResults, allResults.length]);
+  }, [allResults, allResults.length, event.numOfParticipants]);
 
   const [currentNumber, setCurrentNumber] = useState<number | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);

@@ -1,18 +1,43 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { getEvents } from "@/actions";
 import Pagination from "@/components/Pagination";
 import EventsList from "@/components/EventsList";
+import toast from "react-hot-toast";
+import { EventsResponse } from "@/lib/types";
+import SpinnerFull from "@/components/SpinnerFull";
 
-export default async function Events({
-  searchParams,
-}: {
-  searchParams: { page: string };
-}) {
-  const page = searchParams.page;
+export default function Events({ page }: { page: string }) {
+  const [events, setEvents] = useState<EventsResponse>({
+    page: 0,
+    limit: 0,
+    totalPages: 0,
+    totalEvents: 0,
+    data: [],
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const events = await getEvents(searchParams.page);
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const events = await getEvents(page);
+
+        setEvents(events);
+      } catch (_err) {
+        console.log(_err)
+        toast.error("Could not load events");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchEvents();
+  }, [page]);
 
   console.log(events);
+
+  if (isLoading) return <SpinnerFull />;
+
   return (
     <>
       {events.data?.length ? (

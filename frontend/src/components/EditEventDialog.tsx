@@ -1,6 +1,5 @@
 "use client";
 
-import { PostgrestError } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 
 import { updateEvent } from "@/actions";
@@ -86,7 +85,7 @@ export function EditEventDialogContent({
       return publicUrlData?.publicUrl; // Return the image URL
     } catch (error: unknown) {
       // Handling error
-      if (error instanceof PostgrestError) {
+      if (error instanceof Error) {
         toast.dismiss();
         toast.error(`Failed to upload image: ${error.message}`);
       } else if (error instanceof Error) {
@@ -131,9 +130,13 @@ export function EditEventDialogContent({
       toast.success("Your event has successfully been updated.");
       setIsOpen(false);
     } catch (error) {
-      toast.error(
-        error.message || "An error occurred while updating the event."
-      );
+      if (error instanceof Error) {
+        toast.error(
+          error.message || "An error occurred while updating the event."
+        );
+      } else {
+        toast.error("An unknown error occurred while updating the event.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -216,7 +219,6 @@ export function EditEventDialogContent({
               <div>
                 <div className="mt-2">
                   <ImageInput
-                    image={image}
                     label="Upload a logo"
                     setImage={setImage}
                     savedPreview={preview}

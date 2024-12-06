@@ -21,7 +21,11 @@ export default function ClearResultsDialog({ setIsOpen, event }) {
       toast.success("Results have been cleared successfully");
       setIsOpen(false);
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     } finally {
       setIsLoading(false);
     }
