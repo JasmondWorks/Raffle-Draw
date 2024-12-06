@@ -12,6 +12,9 @@ const usersRoute = require("./routes/users");
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (_, res) => {
+  res.status(200).json("Home route");
+});
 // Routes
 app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/results", resultsRoute);
