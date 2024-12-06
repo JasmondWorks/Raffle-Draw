@@ -3,7 +3,7 @@
 import SpinnerFull from "@/components/SpinnerFull";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 function ProtectedRoutes({ children }) {
   const { user, isAuthenticating } = useAuth();
