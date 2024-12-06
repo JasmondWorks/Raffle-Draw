@@ -10,10 +10,19 @@ const eventSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    // logo: {
-    //   type: String,
-    //   required: false,
-    // },
+    logoImage: {
+      type: String,
+      // No need to set required: false as it's the default behavior
+    },
+    organisationName: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );

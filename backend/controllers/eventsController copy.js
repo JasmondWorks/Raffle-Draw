@@ -43,16 +43,12 @@ const getEvents = async (req, res) => {
 const getEvent = async (req, res) => {
   const { id } = req.params;
 
-  console.log("User id on req: ", req.user._id);
-
   const event = await Event.findById(id);
 
-  if (!event) return res.status(400).json({ error: "Could not find event" });
-  console.log("User id on event", event.userId);
-  console.log(event.userId === req.user._id);
-
-  if (event.userId.toString() !== req.user._id.toString())
+  if (event.userId !== req.user._id)
     return res.status(404).json({ error: "Could not find event" });
+
+  if (!event) return res.status(400).json({ error: "Could not find event" });
 
   res.status(200).json(event);
 };
