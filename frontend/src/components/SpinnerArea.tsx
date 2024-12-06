@@ -139,7 +139,7 @@ export default function SpinnerArea({
 
       <div className="text-center  grid place-items-center">
         <h1
-          className="text-[5rem] h-52 items-center font-bold text-neutral-600 flex justify-center"
+          className="text-[7rem] h-52 items-center font-bold text-neutral-600 flex justify-center"
           aria-live="polite"
         >
           {finalNumber !== null ? (
