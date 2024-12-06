@@ -6,21 +6,22 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 function ProtectedRoutes({ children }) {
-  const { user, isAuthenticating, authenticated } = useAuth();
+  const { user, isAuthenticating } = useAuth();
   const router = useRouter();
-  const hasCheckedAuthentication = useRef(false); // Track if authentication has been checked
+
+  console.log(user);
 
   useEffect(() => {
-    if (!isAuthenticating && !hasCheckedAuthentication.current) {
+    if (!isAuthenticating) {
       // If authentication is not happening and it hasn't been checked before
-      hasCheckedAuthentication.current = true;
 
-      if (!authenticated) {
+      if (!user) {
+        console.log("here");
         // Only redirect to sign-in if the user is not authenticated and hasn't been redirected before
         router.push("/auth/signin");
       }
     }
-  }, [isAuthenticating, authenticated, router]);
+  }, [isAuthenticating, user, router]);
 
   // While checking authentication, show spinner
   if (isAuthenticating) return <SpinnerFull />;

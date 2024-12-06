@@ -115,17 +115,17 @@ export default function SignupForm() {
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              {isLoading ? <Spinner /> : "Sign in"}
+              {isLoading ? <Spinner className="!border-white" /> : "Sign in"}
             </button>
           </div>
         </form>
         <p className="mt-10 text-center text-sm/6 text-gray-500">
-          Don{"'"}t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/auth/signup"
+            href="/auth/signin"
             className="font-semibold text-indigo-600 hover:text-indigo-500"
           >
-            Sign up
+            Sign in
           </Link>
         </p>
       </div>

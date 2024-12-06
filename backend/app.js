@@ -20,4 +20,15 @@ app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/results", resultsRoute);
 app.use("/api/v1/users", usersRoute);
 
+const connectDb = require("./config/db");
+const PORT = process.env.PORT || 5000;
+
+// MongoDB Connection
+connectDb();
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 module.exports = app;

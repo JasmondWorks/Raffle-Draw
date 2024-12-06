@@ -72,7 +72,7 @@ export default function SigninForm() {
               </label>
               <div className="text-sm">
                 <Link
-                  href="/auth/forgot-password"
+                  href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
@@ -96,7 +96,7 @@ export default function SigninForm() {
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold !text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              {isLoading ? <Spinner /> : "Sign in"}
+              {isLoading ? <Spinner className="!border-white" /> : "Sign in"}
             </button>
           </div>
         </form>

@@ -18,6 +18,6 @@ module.exports.requireAuth = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    res.status(401).json({ error: error.message });
+    return res.status(401).json({ error: error.message });
   }
 };

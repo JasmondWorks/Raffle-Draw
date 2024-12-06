@@ -133,9 +133,9 @@ export default function SpinnerArea({
       <audio ref={drumRollRef} src={drumRoll} preload="auto" />
       <audio ref={crashRef} src={crashSound} preload="auto" />
 
-      <div className="text-center h-36 grid place-items-center">
+      <div className="text-center  grid place-items-center">
         <h1
-          className="text-[5rem] font-bold text-neutral-600 flex justify-center"
+          className="text-[5rem] h-52 items-center font-bold text-neutral-600 flex justify-center"
           aria-live="polite"
         >
           {finalNumber !== null ? (
@@ -144,7 +144,7 @@ export default function SpinnerArea({
             currentNumber // Show current number during spin
           ) : logoImage ? (
             <Image
-              className="w-52 aspect-auto"
+              className="w-52 aspect-auto object-contain"
               src={logoImage}
               width={500}
               height={500}
