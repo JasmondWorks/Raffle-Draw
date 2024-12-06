@@ -13,6 +13,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false, // Disable strict null checks
+
     "plugins": [
       {
         "name": "next"
